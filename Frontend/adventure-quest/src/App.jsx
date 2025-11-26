@@ -5,12 +5,14 @@ import About from "./components/AboutSection";
 import FeaturesPage from "./components/FeaturesSection";
 import ContactPage from "./components/ContactSection";
 import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
   return (
     <Routes>
       {/* Login route */}
       <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
 
       {/* Landing layout with nested routes */}
       <Route path="/" element={<Landing />}>

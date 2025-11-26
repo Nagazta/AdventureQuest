@@ -3,7 +3,10 @@ import '../pages/styles/Login.css';
 import boy from '../assets/images/characters/Boy.png';
 import girl from '../assets/images/characters/Girl.png';
 import Header from '../components/Header';
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -22,6 +25,9 @@ const Login = () => {
     console.log('Login submitted:', formData);
     // Add your login logic here
   };
+  const goToRegister = () => {
+     navigate('/register'); 
+  }
 
   return (
     <>
@@ -84,7 +90,7 @@ const Login = () => {
             </button>
 
             <p className="register-text">
-              Don't have an account? <a href="#register" className="register-link">Register here!</a>
+              Don't have an account? <a href="#register" className="register-link" onClick={goToRegister}>Register here!</a>
             </p>
           </div>
         </div>
