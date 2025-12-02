@@ -2,6 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import teacherRoutes from './routes/teacherRoutes.js';
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/teacher', teacherRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -38,7 +40,8 @@ app.get('/', (req, res) => {
         version: '1.0.0',
         endpoints: {
             health: '/api/health',
-            auth: '/api/auth'
+            auth: '/api/auth',
+            teacher: '/api/teacher'
         }
     });
 });
@@ -65,4 +68,5 @@ app.listen(PORT, () => {
     console.log(`🚀 Backend server running on http://localhost:${PORT}`);
     console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
     console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
+    console.log(`👨‍🏫 Teacher API: http://localhost:${PORT}/api/teacher`);
 });
