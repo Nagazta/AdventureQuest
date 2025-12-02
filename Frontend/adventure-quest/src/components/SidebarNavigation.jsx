@@ -20,8 +20,7 @@ const SidebarNavigation = ({ onLogout }) => {
   return (
     <div className="sidebar">
       <div className="sidebar-header">
-        <h1 className="app-title">Adventure</h1>
-        <h1 className="app-title">Quest</h1>
+        <h1 className="app-title">BisaQuest</h1>
       </div>
 
       <nav className="sidebar-nav">

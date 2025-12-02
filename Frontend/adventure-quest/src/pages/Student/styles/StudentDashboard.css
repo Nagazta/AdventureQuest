@@ -29,8 +29,9 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     position: relative;
-    max-width: 1400px;
-    margin: 0 auto;
+    min-width: 1000px;
+    margin-top: 400px;
+    margin-left: 100px;
 }
 
 .decorative-clouds {
