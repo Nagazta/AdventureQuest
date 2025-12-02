@@ -1,32 +1,31 @@
-
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Button from '../../components/Button';
-import QuestTitle from '../../components/QuestTitle'
 import CharacterCard from '../../components/CharacterCard'
-import UserProfileHeader from '../../components/UserProfileHeader'
 import Boy from '../../assets/images/characters/Boy.png'
+import Girl from '../../assets/images/characters/Girl.png'    
 import '../../pages/Student/styles/CharacterSelectionPage.css';
 
 
 const CharacterSelectionPage = () => {
+  const navigate = useNavigate();
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
   const characters = [
     { 
       id: 'male', 
-      gender: 'Male', 
-      image: <Boy/> 
+      gender: 'Roberto', 
+      image: Boy 
     },
     { 
       id: 'female', 
-      gender: 'Female', 
-      image: '/assets/images/characters/Girl.png' 
+      gender: 'Roberta', 
+      image: Girl 
     }
   ];
 
-  const handleMenuClick = () => {
-    console.log('Menu clicked');
-    // Add menu modal logic here
+  const handleBack = () => {
+    navigate("/dashboard"); 
   };
 
   const handleCharacterSelect = (characterId) => {
@@ -47,16 +46,13 @@ const CharacterSelectionPage = () => {
       </div>
 
       <div className="main-content">
-        <div className="header">
-          <Button variant="menu" onClick={handleMenuClick}>
-            Menu
-          </Button>
-          <QuestTitle questName="Vocabulary Quest Village Theme" />
-          <UserProfileHeader 
-            userName="Juan Dela Cruz" 
-            profilePicture={null}
-          />
-        </div>
+        <Button 
+          variant="back" 
+          className="back-button"
+          onClick={handleBack}
+        >
+          ← Back
+        </Button>
 
         <div className="selection-content">
           <h2 className="selection-prompt">Please Choose a character</h2>

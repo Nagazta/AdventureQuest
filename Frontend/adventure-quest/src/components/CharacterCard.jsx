@@ -1,4 +1,6 @@
 import Button from "./Button";
+import Card from '../assets/images/cards.png';
+import '../components/styles/CharacterCard.css';
 
 const CharacterCard = ({ character, isSelected, onClick }) => {
   return (
@@ -9,14 +11,14 @@ const CharacterCard = ({ character, isSelected, onClick }) => {
     >
       <div className="character-frame">
         <img 
+          src={Card} 
+          alt="card frame"
+          className="card-frame"
+        />
+        <img 
           src={character.image} 
           alt={character.gender}
           className="character-image"
-        />
-        <img 
-          src="/assets/images/.cards.png" 
-          alt="card frame"
-          className="card-frame"
         />
       </div>
     </Button>
