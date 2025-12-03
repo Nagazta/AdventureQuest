@@ -160,7 +160,6 @@
   pointer-events: none;
 }
 
-
 /* Secondary Button Variant */
 .btn-secondary {
   background-color: #e5e7eb;
@@ -180,31 +179,21 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.btn-secondary:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-/* Danger Button Variant */
+/* Danger Button Variant (Logout) */
 .btn-danger {
-  background-color: #dc2626;
-  border: 3px solid #991b1b;
-  border-radius: 12px;
-  padding: 12px 32px;
-  font-size: 18px;
-  font-weight: bold;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
-  min-width: 140px;
-  font-family: 'Georgia', serif;
+  border: 3px solid #991b1b;
+  box-shadow: 0px 4px 0px #7f1d1d;
 }
 
 .btn-danger:hover {
-  background-color: #b91c1c;
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(185, 28, 28, 0.4);
+  box-shadow: 0px 6px 0px #7f1d1d;
 }
 
 .btn-danger:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 4px rgba(185, 28, 28, 0.4);
+  transform: translateY(2px);
+  box-shadow: 0px 2px 0px #7f1d1d;
 }
