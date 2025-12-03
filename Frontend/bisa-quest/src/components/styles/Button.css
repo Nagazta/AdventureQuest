@@ -160,6 +160,26 @@
   pointer-events: none;
 }
 
+/* Secondary Button Variant */
+.btn-secondary {
+  background-color: #e5e7eb;
+  border: 3px solid #6b7280;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #374151;
+  min-width: 140px;
+  font-family: 'Georgia', serif;
+}
+
+.btn-secondary:hover {
+  background-color: #d1d5db;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Danger Button Variant (Logout) */
 .btn-danger {
   background: linear-gradient(135deg, #ef4444, #dc2626);
   color: white;
