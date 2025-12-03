@@ -1,0 +1,43 @@
+.language-selection-page {
+  min-height: 100vh;
+  background: url('../../../assets/images/bg-dashboard.png') no-repeat center center/cover;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 20px;
+}
+
+.back-button.language {
+  position: absolute;
+  top: 30px;
+  left: 40px;
+  z-index: 10;
+}
+
+.content-container {
+  background: rgba(234, 213, 168, 0.6); 
+  backdrop-filter: blur(12px);         
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4); 
+  margin-top: 30px;
+  height: 600px;
+  max-height: 600px;
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  margin-left: 80px;
+  max-width: 1200px;
+  width: 100%;
+}
+
+
+@media (max-width: 1024px) {
+  .content-container {
+    flex-direction: column;
+    gap: 30px;
+  }
+}
