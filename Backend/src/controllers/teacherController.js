@@ -2,13 +2,11 @@ import { supabase, supabaseAdmin } from '../config/supabaseClient.js';
 
 export const getDashboardData = async (req, res) => {
     try {
-        const teacherUserId = req.user.id; // This is the user_id from JWT
+        const teacherUserId = req.user.id;
 
         console.log('Getting dashboard for teacher user_id:', teacherUserId);
-
-        // FIRST: Get teacher_id from Teacher table using user_id
         const { data: teacherData, error: teacherError } = await supabase
-            .from('Teacher')
+            .from('teacher')
             .select('teacher_id')
             .eq('user_id', teacherUserId)
             .single();
@@ -20,12 +18,11 @@ export const getDashboardData = async (req, res) => {
 
         console.log('Found teacher_id:', teacherData.teacher_id);
 
-        // NOW: Get students using the correct teacher_id
         const { data: students, error: studentsError } = await supabase
-            .from('Student')
+            .from('student')
             .select(`
                 *,
-                Users!Student_user_id_fkey (
+                users!student_user_id_fkey (
                     fullname,
                     email,
                     username
@@ -42,9 +39,9 @@ export const getDashboardData = async (req, res) => {
 
         const formattedStudents = students.map(s => ({
             ...s,
-            fullname: s.Users?.fullname || 'Unknown',
-            email: s.Users?.email || '',
-            username: s.Users?.username || '',
+            fullname: s.users?.fullname || 'Unknown',
+            email: s.users?.email || '',
+            username: s.users?.username || '',
             overall_progress: s.overall_progress || 0
         }));
 
@@ -98,7 +95,7 @@ export const createStudent = async (req, res) => {
 
         // Get teacher_id from Teacher table
         const { data: teacherData, error: teacherError } = await supabase
-            .from('Teacher')
+            .from('teacher')
             .select('teacher_id')
             .eq('user_id', teacherUserId)
             .single();
@@ -112,7 +109,7 @@ export const createStudent = async (req, res) => {
 
         // Check if student ID already exists
         const { data: existingUser } = await supabase
-            .from('Users')
+            .from('users')
             .select('username')
             .eq('username', studentId)
             .single();
@@ -147,7 +144,7 @@ export const createStudent = async (req, res) => {
 
         // Insert into Users table
         const { data: userData, error: userError } = await supabase
-            .from('Users')
+            .from('users')
             .insert([{
                 user_id: authData.user.id,
                 username: studentId,
@@ -165,9 +162,8 @@ export const createStudent = async (req, res) => {
 
         console.log('User record created:', userData.user_id);
 
-        // Insert into Student table
         const { data: studentData, error: studentError } = await supabase
-            .from('Student')
+            .from('student')
             .insert([{
                 user_id: authData.user.id,
                 teacher_id: teacherData.teacher_id,

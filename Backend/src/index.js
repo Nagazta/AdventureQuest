@@ -2,7 +2,10 @@ import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import authRoutes from './routes/authRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
 import teacherRoutes from './routes/teacherRoutes.js';
+import preferenceRoutes from './routes/preferenceRoutes.js';
+import progressRoutes from './routes/progressRoutes.js';
 
 dotenv.config();
 
@@ -11,7 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-    origin: 'http://localhost:5173', // Vite default port
+    origin: 'http://localhost:5173',
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -22,7 +25,10 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api/student', studentRoutes);
 app.use('/api/teacher', teacherRoutes);
+app.use('/api/preferences', preferenceRoutes);
+app.use('/api/progress', progressRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
@@ -41,7 +47,9 @@ app.get('/', (req, res) => {
         endpoints: {
             health: '/api/health',
             auth: '/api/auth',
-            teacher: '/api/teacher'
+            teacher: '/api/teacher',
+            preferences: '/api/preferences',
+            progress: '/api/progress'
         }
     });
 });
@@ -69,4 +77,6 @@ app.listen(PORT, () => {
     console.log(`📊 Health check: http://localhost:${PORT}/api/health`);
     console.log(`🔐 Auth API: http://localhost:${PORT}/api/auth`);
     console.log(`👨‍🏫 Teacher API: http://localhost:${PORT}/api/teacher`);
+    console.log(`⚙️ Preferences API: http://localhost:${PORT}/api/preferences`);
+    console.log(`📊 Progress API: http://localhost:${PORT}/api/progress`);
 });

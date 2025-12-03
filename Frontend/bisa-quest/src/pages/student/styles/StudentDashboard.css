@@ -4,6 +4,21 @@
     background: url('../../../assets/images/dashboard.png') no-repeat center center/cover;
 }
 
+.welcome-text {
+    font-size: 32px;
+    font-weight: 900;
+    color: #78350f;
+    margin: 0;
+    text-shadow: 2px 2px 0px rgba(255, 255, 255, 0.5);
+}
+
+.welcome-subtitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: #92400e;
+    margin: 8px 0 0 0;
+}
+
 .main-content {
     flex: 1;
     overflow-y: auto;
