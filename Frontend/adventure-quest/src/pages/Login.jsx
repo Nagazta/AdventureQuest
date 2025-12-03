@@ -27,10 +27,10 @@ const Login = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      if (user.role === 'teacher') {
-        navigate('/teacher-dashboard');
-      } else if (user.role === 'student') {
-        navigate('/dashboard');
+      if (user.role === "teacher") {
+        navigate("/teacher-dashboard");
+      } else if (user.role === "student") {
+        navigate("/dashboard");
       }
     }
   }, [user, navigate]);
@@ -87,37 +87,35 @@ const Login = () => {
     if (error) setError("");
   };
 
- const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
-  setLoading(true);
+  // Replace the handleSubmit function in Login.jsx:
 
-  try {
-    // Use username as email (or convert if needed)
-    const email = formData.username.includes('@') 
-      ? formData.username 
-      : `${formData.username}@adventurequest.com`;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const result = await login(email, formData.password);
+    try {
+      const email = formData.username.includes("@")
+        ? formData.username
+        : `${formData.username}@adventurequest.com`;
 
-    if (result.success) {
-      // Navigate based on role
-      if (result.data.user.role === 'teacher') {
-        alert('Welcome Teacher! Dashboard coming soon...');
-        // navigate('/teacher-dashboard'); // Uncomment when ready
-      } else if (result.data.user.role === 'student') {
-        navigate('/dashboard');
+      const result = await login(email, formData.password);
+
+      if (result.success) {
+        if (result.data.user.role === "teacher") {
+          navigate("/teacher-dashboard");
+        } else if (result.data.user.role === "student") {
+          navigate("/dashboard");
+        }
+      } else {
+        setError(result.error || "Login failed.");
       }
-    } else {
-      setError(result.error || 'Login failed. Please check your credentials.');
+    } catch {
+      setError("An error occurred.");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError('An unexpected error occurred. Please try again.');
-    console.error('Login error:', err);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const goToRegister = (e) => {
     e.preventDefault();
@@ -177,16 +175,18 @@ const Login = () => {
           <h1 className="login-title">Login</h1>
 
           {error && (
-            <div style={{
-              background: 'linear-gradient(135deg, #ff6b6b, #ee5a6f)',
-              color: 'white',
-              padding: '1rem',
-              borderRadius: '0.75rem',
-              marginBottom: '1rem',
-              fontWeight: '600',
-              textAlign: 'center',
-              boxShadow: '0 4px 12px rgba(255, 107, 107, 0.3)'
-            }}>
+            <div
+              style={{
+                background: "linear-gradient(135deg, #ff6b6b, #ee5a6f)",
+                color: "white",
+                padding: "1rem",
+                borderRadius: "0.75rem",
+                marginBottom: "1rem",
+                fontWeight: "600",
+                textAlign: "center",
+                boxShadow: "0 4px 12px rgba(255, 107, 107, 0.3)",
+              }}
+            >
               {error}
             </div>
           )}
@@ -229,12 +229,8 @@ const Login = () => {
               </a>
             </div>
 
-            <button 
-              type="submit" 
-              className="login-button"
-              disabled={loading}
-            >
-              {loading ? 'Logging in...' : 'Login'}
+            <button type="submit" className="login-button" disabled={loading}>
+              {loading ? "Logging in..." : "Login"}
             </button>
 
             <p className="register-text">

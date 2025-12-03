@@ -26,10 +26,10 @@ const Register = () => {
   // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      if (user.role === 'teacher') {
-        navigate('/teacher-dashboard');
-      } else if (user.role === 'student') {
-        navigate('/dashboard');
+      if (user.role === "teacher") {
+        navigate("/teacher-dashboard");
+      } else if (user.role === "student") {
+        navigate("/dashboard");
       }
     }
   }, [user, navigate]);
@@ -101,17 +101,17 @@ const Register = () => {
 
     // Validation
     if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     if (formData.password.length < 6) {
-      setError('Password must be at least 6 characters long');
+      setError("Password must be at least 6 characters long");
       return;
     }
 
-    if (!formData.email.includes('@')) {
-      setError('Please enter a valid email address');
+    if (!formData.email.includes("@")) {
+      setError("Please enter a valid email address");
       return;
     }
 
@@ -128,14 +128,14 @@ const Register = () => {
       );
 
       if (result.success) {
-        alert("Register Sucessfuly! Navigating to login")
-        navigate('/login');
+        alert("Register Sucessfuly! Navigating to login");
+        navigate("/login");
       } else {
-        setError(result.error || 'Registration failed. Please try again.');
+        setError(result.error || "Registration failed. Please try again.");
       }
     } catch (err) {
-      setError('An unexpected error occurred. Please try again.');
-      console.error('Registration error:', err);
+      setError("An unexpected error occurred. Please try again.");
+      console.error("Registration error:", err);
     } finally {
       setLoading(false);
     }
@@ -185,18 +185,20 @@ const Register = () => {
           <h1 className="login-title">Registration</h1>
 
           {error && (
-            <div style={{
-              background: 'linear-gradient(135deg, #ff6b6b, #ee5a6f)',
-              color: 'white',
-              padding: '1rem',
-              borderRadius: '0.75rem',
-              marginBottom: '1rem',
-              fontWeight: '600',
-              textAlign: 'center',
-              boxShadow: '0 4px 12px rgba(255, 107, 107, 0.3)',
-              marginLeft: '4rem',
-              marginRight: '4rem'
-            }}>
+            <div
+              style={{
+                background: "linear-gradient(135deg, #ff6b6b, #ee5a6f)",
+                color: "white",
+                padding: "1rem",
+                borderRadius: "0.75rem",
+                marginBottom: "1rem",
+                fontWeight: "600",
+                textAlign: "center",
+                boxShadow: "0 4px 12px rgba(255, 107, 107, 0.3)",
+                marginLeft: "4rem",
+                marginRight: "4rem",
+              }}
+            >
               {error}
             </div>
           )}
@@ -295,7 +297,7 @@ const Register = () => {
               className="login-button register-button"
               disabled={loading}
             >
-              {loading ? 'Registering...' : 'Register'}
+              {loading ? "Registering..." : "Register"}
             </button>
 
             {/* Login Link */}
@@ -307,21 +309,33 @@ const Register = () => {
             </p>
 
             {/* Important Notice */}
-            <div style={{
-              marginTop: '1rem',
-              padding: '1rem',
-              background: 'linear-gradient(135deg, #FFF9E6 0%, #FFF4D1 100%)',
-              border: '3px solid #FCD765',
-              borderRadius: '0.75rem',
-              fontSize: '0.85rem',
-              color: '#6B3E1D'
-            }}>
-              <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'flex-start' }}>
-                <span style={{ fontSize: '1.2rem' }}>⚠</span>
+            <div
+              style={{
+                marginTop: "1rem",
+                padding: "1rem",
+                background: "linear-gradient(135deg, #FFF9E6 0%, #FFF4D1 100%)",
+                border: "3px solid #FCD765",
+                borderRadius: "0.75rem",
+                fontSize: "0.85rem",
+                color: "#6B3E1D",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  gap: "0.75rem",
+                  alignItems: "flex-start",
+                }}
+              >
+                <span style={{ fontSize: "1.2rem" }}>⚠</span>
                 <div>
-                  <strong style={{ display: 'block', marginBottom: '0.25rem' }}>Important Notice</strong>
-                  <p style={{ margin: '0.25rem 0' }}>Only teachers can create accounts.</p>
-                  <p style={{ margin: '0.25rem 0' }}>Students will be created by their teachers after registration is complete.</p>
+                  <strong style={{ display: "block", marginBottom: "0.25rem" }}>
+                    Important Notice
+                  </strong>
+                  <p style={{ margin: "0.25rem 0" }}>
+                    Only teachers can create accounts. Students will be created
+                    by their teachers after registration is complete.
+                  </p>
                 </div>
               </div>
             </div>
