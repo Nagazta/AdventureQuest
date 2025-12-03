@@ -1,11 +1,8 @@
 import { supabase } from '../config/supabaseClient.js';
 
-// Register Teacher
 export const register = async (req, res) => {
     try {
         const { email, password, firstName, lastName, teacherID } = req.body;
-
-        // Validation
         if (!email || !password || !firstName || !lastName) {
             return res.status(400).json({
                 success: false,
@@ -13,7 +10,6 @@ export const register = async (req, res) => {
             });
         }
 
-        // 1. Create auth user in Supabase
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email,
             password,
@@ -21,12 +17,11 @@ export const register = async (req, res) => {
 
         if (authError) throw authError;
 
-        // 2. Create user record in Users table
         const { data: userData, error: userError } = await supabase
-            .from('Users')
+            .from('users')
             .insert([
                 {
-                    user_id: authData.user.id,  // ✅ Changed from user_ID to user_id
+                    user_id: authData.user.id,
                     username: email.split('@')[0],
                     email: email,
                     fullname: `${firstName} ${lastName}`.trim(),
@@ -38,18 +33,16 @@ export const register = async (req, res) => {
 
         if (userError) throw userError;
 
-        // 3. Create teacher record in Teacher table
         const teacherInsert = {
-            user_id: authData.user.id,  // ✅ Changed from user_ID to user_id
+            user_id: authData.user.id,
         };
 
-        // Add optional teacher identifier if provided
         if (teacherID) {
             teacherInsert.teacher_identifier = teacherID;
         }
 
         const { data: teacherData, error: teacherError } = await supabase
-            .from('Teacher')
+            .from('teacher')
             .insert([teacherInsert])
             .select()
             .single();
@@ -74,20 +67,16 @@ export const register = async (req, res) => {
     }
 };
 
-// Login (Teacher or Student)
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        // Validation
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
                 error: 'Please provide email and password'
             });
         }
-
-        // 1. Sign in with Supabase Auth
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -95,31 +84,29 @@ export const login = async (req, res) => {
 
         if (authError) throw authError;
 
-        // 2. Get user details from Users table
         const { data: userData, error: userError } = await supabase
-            .from('Users')
+            .from('users')
             .select('*')
-            .eq('user_id', authData.user.id)  // ✅ Changed from user_ID to user_id
+            .eq('user_id', authData.user.id)
             .single();
 
         if (userError) throw userError;
 
-        // 3. Get role-specific data
         let roleData = null;
         if (userData.role === 'teacher') {
             const { data: teacherData, error: teacherError } = await supabase
-                .from('Teacher')
+                .from('teacher')
                 .select('*')
-                .eq('user_id', authData.user.id)  // ✅ Changed from user_ID to user_id
+                .eq('user_id', authData.user.id)
                 .single();
 
             if (teacherError) throw teacherError;
             roleData = teacherData;
         } else if (userData.role === 'student') {
             const { data: studentData, error: studentError } = await supabase
-                .from('Student')
+                .from('student')
                 .select('*')
-                .eq('user_id', authData.user.id)  // ✅ Changed from user_ID to user_id
+                .eq('user_id', authData.user.id)
                 .single();
 
             if (studentError) throw studentError;
@@ -182,11 +169,10 @@ export const getSession = async (req, res) => {
 
         if (error) throw error;
 
-        // Get full user data
         const { data: userData, error: userError } = await supabase
-            .from('Users')
+            .from('users')
             .select('*')
-            .eq('user_id', user.id)  // ✅ Changed from user_ID to user_id
+            .eq('user_id', user.id)
             .single();
 
         if (userError) throw userError;
@@ -210,7 +196,6 @@ export const createStudent = async (req, res) => {
     try {
         const { email, password, firstName, lastName, teacherID } = req.body;
 
-        // Validation
         if (!email || !password || !firstName || !lastName || !teacherID) {
             return res.status(400).json({
                 success: false,
@@ -218,7 +203,6 @@ export const createStudent = async (req, res) => {
             });
         }
 
-        // 1. Create auth user
         const { data: authData, error: authError } = await supabase.auth.signUp({
             email,
             password,
@@ -226,12 +210,11 @@ export const createStudent = async (req, res) => {
 
         if (authError) throw authError;
 
-        // 2. Create user record
         const { data: userData, error: userError } = await supabase
-            .from('Users')
+            .from('users')
             .insert([
                 {
-                    user_id: authData.user.id,  // ✅ Changed from user_ID to user_id
+                    user_id: authData.user.id,
                     username: email.split('@')[0],
                     email: email,
                     fullname: `${firstName} ${lastName}`.trim(),
@@ -243,13 +226,12 @@ export const createStudent = async (req, res) => {
 
         if (userError) throw userError;
 
-        // 3. Create student record
         const { data: studentData, error: studentError } = await supabase
-            .from('Student')
+            .from('student')
             .insert([
                 {
-                    user_id: authData.user.id,  // ✅ Changed from user_ID to user_id
-                    teacher_id: teacherID,  // ✅ Changed from teacher_ID to teacher_id
+                    user_id: authData.user.id,
+                    teacher_id: teacherID,
                 },
             ])
             .select()

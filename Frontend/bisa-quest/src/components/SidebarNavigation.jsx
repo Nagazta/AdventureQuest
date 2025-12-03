@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Button from '../components/Button';
-import HomeIcon from '../assets/icons/HomeIcon';
-import ProgressIcon from '../assets/icons/ProgressIcon';
-import BadgesIcon from '../assets/icons/BadgesIcon';
-import ProfileIcon from '../assets/icons/ProfileIcon';
-import '../components/styles/SidebarNavigation.css';
+import React, { useState } from "react";
+import { useAuth } from "../context/AuthContext";
+import Button from "../components/Button";
+import HomeIcon from "../assets/icons/HomeIcon";
+import ProgressIcon from "../assets/icons/ProgressIcon";
+import BadgesIcon from "../assets/icons/BadgesIcon";
+import "../components/styles/SidebarNavigation.css";
 
 const SidebarNavigation = ({ onLogout }) => {
-  const [activeItem, setActiveItem] = useState('home');
+  const { user } = useAuth();
+  const [activeItem, setActiveItem] = useState("home");
 
   const navItems = [
-    { id: 'profile', label: 'Profiles', icon: <ProfileIcon /> },
-    { id: 'home', label: 'Home', icon: <HomeIcon /> },
-    { id: 'progress', label: 'Progress', icon: <ProgressIcon /> },
-    { id: 'badges', label: 'Badges', icon: <BadgesIcon /> }
+    { id: "home", label: "Home", icon: <HomeIcon /> },
+    { id: "progress", label: "Progress", icon: <ProgressIcon /> },
+    { id: "badges", label: "Badges", icon: <BadgesIcon /> },
   ];
+
+  // Get initials from fullname
+  const getInitials = (name) => {
+    if (!name) return "A";
+    const names = name.split(" ");
+    return names.length > 1
+      ? `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase()
+      : names[0][0].toUpperCase();
+  };
+
+  const handleProfileClick = () => {
+    setActiveItem("profile");
+    // TODO: Navigate to profile page or open profile modal
+    console.log("Profile clicked");
+  };
 
   return (
     <div className="sidebar">
@@ -23,12 +37,28 @@ const SidebarNavigation = ({ onLogout }) => {
         <h1 className="app-title">BisaQuest</h1>
       </div>
 
+      {/* Clickable Student Profile Section */}
+      <button
+        className={`student-profile ${
+          activeItem === "profile" ? "active" : ""
+        }`}
+        onClick={handleProfileClick}
+      >
+        <div className="student-avatar">{getInitials(user?.fullname)}</div>
+        <div className="student-info">
+          <p className="student-name">
+            {user?.fullname ? user.fullname.split(" ")[0] : "Adventurer"}
+          </p>
+          <p className="student-role">Young Adventurer</p>
+        </div>
+      </button>
+
       <nav className="sidebar-nav">
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => setActiveItem(item.id)}
-            className={`nav-item ${activeItem === item.id ? 'active' : ''}`}
+            className={`nav-item ${activeItem === item.id ? "active" : ""}`}
           >
             <span className="nav-icon">{item.icon}</span>
             <span className="nav-label">{item.label}</span>
