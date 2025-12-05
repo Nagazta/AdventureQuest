@@ -6,6 +6,8 @@ import studentRoutes from './routes/studentRoutes.js';
 import teacherRoutes from './routes/teacherRoutes.js';
 import preferenceRoutes from './routes/preferenceRoutes.js';
 import progressRoutes from './routes/progressRoutes.js';
+import environmentRoutes from "./routes/environmentRoutes.js";
+
 
 dotenv.config();
 
@@ -29,6 +31,9 @@ app.use('/api/student', studentRoutes);
 app.use('/api/teacher', teacherRoutes);
 app.use('/api/preferences', preferenceRoutes);
 app.use('/api/progress', progressRoutes);
+app.use("/environment", environmentRoutes);
+
+app.use('/', environmentRoutes); // now /initialize and /interaction exist
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
