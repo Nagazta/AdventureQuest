@@ -1,76 +1,85 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import EnvironmentPage from '../../components/EnvironmentPage';
 import Button from '../../components/Button';
+import { environmentApi } from '../../services/environmentServices.js';
 
-// Import your images - adjust these paths to match your project structure
+// Images
 import VillageBackground from '../../assets/images/environments/village.png';
 import NandoCharacter from '../../assets/images/characters/vocabulary/Village_Quest_NPC_1.png';
 import LigayaCharacter from '../../assets/images/characters/vocabulary/Village_Quest_NPC_2.png';
 import VicenteCharacter from '../../assets/images/characters/vocabulary/Village_Quest_NPC_3.png';
 import PlayerCharacter from '../../assets/images/characters/Boy.png';
 
-import './styles/VillagePage.css'
+import './styles/VillagePage.css';
 
 const VillagePage = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+  const [villageNPCs, setVillageNPCs] = useState([]);
 
-  const villageNPCs = [
-    {
-      character: NandoCharacter,
-      name: "Nando",
-      x: 50, // Center horizontally
-      y: 35, // Upper area
-      showName: true,
-      npcId: 'nando'
-    },
-    {
-      character: LigayaCharacter,
-      name: "Ligaya",
-      x: 70, // Right side
-      y: 45, // Middle height
-      showName: true,
-      npcId: 'ligaya'
-    },
-    {
-      character: VicenteCharacter,
-      name: "Vicente",
-      x: 20, // Left side
-      y: 60, // Lower middle
-      showName: true,
-      npcId: 'vicente'
+  useEffect(() => {
+    initializeVillage();
+  }, []);
+
+  const initializeVillage = async () => {
+    setLoading(true);
+    const studentId = localStorage.getItem('studentId');
+    if (!studentId) {
+      console.error("No student ID found in localStorage");
+      setLoading(false);
+      return;
     }
-  ];
+    console.log("Found studentId in localStorage:", studentId);
 
-  const handleNPCClick = (npc, index) => {
-    // Get the npcId from the NPC object
-    const npcId = villageNPCs[index].npcId;
-    
-    console.log(`Clicked on ${npc.name} (${npcId})`);
-    
-    navigate('/student/instructions', { 
-      state: { 
-        npcId: npcId,
-        returnTo: '/student/village' 
-      } 
-    });
+    // Frontend-defined NPCs
+    const npcs = [
+      { npcId: 'nando', name: 'Nando', x: 50, y: 35, character: NandoCharacter },
+      { npcId: 'ligaya', name: 'Ligaya', x: 70, y: 45, character: LigayaCharacter },
+      { npcId: 'vicente', name: 'Vicente', x: 20, y: 60, character: VicenteCharacter },
+    ];
+    setVillageNPCs(npcs);
+
+    // Initialize environment in backend
+    try {
+      const response = await environmentApi.initializeEnvironment('village', studentId);
+      if (!response.success) {
+        console.error('Backend environment init failed:', response.error);
+      }
+    } catch (err) {
+      console.error('Error initializing environment:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleBackClick = () => {
-    navigate('/dashboard');
-  };
+const handleNPCClick = async (npc) => {
+  const studentId = localStorage.getItem("studentId");
+  if (!studentId) return console.error("No student ID found");
+
+  try {
+    await environmentApi.logNPCInteraction({ studentId, npcName: npc.name });
+    console.log("NPC interaction logged for:", npc.name);
+  } catch (err) {
+    console.error("Error logging NPC interaction:", err);
+  }
+
+  navigate("/student/instructions", {
+    state: { npcId: npc.name.toLowerCase(), returnTo: "/student/village" },
+  });
+};
+
+
+  const handleBackClick = () => navigate('/dashboard');
+
+  if (loading) return <p>Loading village...</p>;
 
   return (
     <div className="village-page-wrapper">
-      {/* Back Button overlay */}
-      <Button 
-        variant="back" 
-        className="back-button-village-overlay" 
-        onClick={handleBackClick}
-      >
+      <Button variant="back" className="back-button-village-overlay" onClick={handleBackClick}>
         ← Back
       </Button>
 
-      {/* Environment Page with all NPCs and player movement */}
       <EnvironmentPage
         environmentType="village"
         backgroundImage={VillageBackground}

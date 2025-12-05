@@ -8,6 +8,8 @@ import TeacherIcon from "../assets/icons/TeacherIcon";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+
+
 const Login = () => {
   const navigate = useNavigate();
   const { login, loginStudent, user } = useAuth();
@@ -101,26 +103,55 @@ const Login = () => {
     try {
       let result;
       if (userType === "student") {
+        console.log("Attempting student login with:", formData);
+
         result = await loginStudent(formData.studentId, formData.classCode);
+        console.log("Login result:", result);
 
         if (result.success) {
+          const student_id = result.data.roleData?.student_id || formData.studentId;
+          console.log("Resolved student_id:", student_id);
+
+          const session = {
+            user: {
+              id: result.data.user.user_id,
+              student_id: student_id,
+              role: "student"
+            }
+          };
+
+          console.log("Storing session:", session);
+
+          localStorage.setItem("session", JSON.stringify(session));
+          localStorage.setItem("studentId", student_id);
+
+          console.log("Student ID saved in localStorage:", localStorage.getItem("studentId"));
+
           navigate("/dashboard");
+          return;
         }
       } else {
         const email = formData.identifier.includes("@")
           ? formData.identifier
           : `${formData.identifier}@gmail.com`;
+
+        console.log("Attempting teacher login with:", email);
+
         result = await login(email, formData.password);
+        console.log("Login result:", result);
 
         if (result.success) {
-          navigate("/teacher/dashboard");
+          navigate("/teacher-dashboard");
+          return;
         }
       }
 
       if (!result.success) {
+        console.log("Login failed with error:", result.error);
         setError(result.error || "Login failed");
       }
-    } catch {
+    } catch (err) {
+      console.error("Unexpected error during login:", err);
       setError("An unexpected error occurred");
     } finally {
       setLoading(false);

@@ -28,15 +28,12 @@ const InstructionsPage = () => {
       instructions: [
         {
           text: "Welcome, young learner! I am the village elder, and I'm delighted to guide you through our beautiful village today.",
-          progress: 0,
         },
         {
           text: "Our village is a place of learning and discovery. Here, you'll meet friendly villagers who will help you master new skills and vocabulary.",
-          progress: 50,
         },
         {
           text: "Let's start with a word matching challenge! Match each word with its correct definition.",
-          progress: 100,
         }
       ],
       nextRoute: '/student/wordMatching'
@@ -47,15 +44,12 @@ const InstructionsPage = () => {
       instructions: [
         {
           text: "Hello there! I'm the village farmer. I tend to the crops and animals around here.",
-          progress: 0,
         },
         {
           text: "Would you like to help me with some tasks? I have vocabulary challenges about nature and farming!",
-          progress: 50,
         },
         {
           text: "Let's start with picture associations! Look at each image and choose the correct word that describes it.",
-          progress: 100,
         }
       ],
       nextRoute: '/student/pictureAssociation'
@@ -66,15 +60,12 @@ const InstructionsPage = () => {
       instructions: [
         {
           text: "Greetings! I'm the village merchant. I travel far and wide to bring goods to our village.",
-          progress: 0,
         },
         {
           text: "I have exciting vocabulary challenges about trading, items, and adventures!",
-          progress: 50,
         },
         {
           text: "Good luck on your learning journey!",
-          progress: 100,
         }
       ],
       nextRoute: '/student/sentenceCompletion'
@@ -85,11 +76,9 @@ const InstructionsPage = () => {
   const defaultInstructions = [
     {
       text: "Welcome, brave adventurer! Your quest begins here in the village. Complete each challenge to unlock new areas and grow stronger.",
-      progress: 0,
     },
     {
       text: "Listen carefully to the instructions. Each module will test your knowledge and skills. Don't worry, I'll guide you every step of the way!",
-      progress: 50,
     },
   ];
 
@@ -114,7 +103,7 @@ const InstructionsPage = () => {
           }
         });
       } else {
-        navigate("/student/quest");
+        navigate("/student/village");
       }
     }
   };
