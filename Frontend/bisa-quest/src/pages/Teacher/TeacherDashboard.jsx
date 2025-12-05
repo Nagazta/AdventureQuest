@@ -62,7 +62,7 @@ const TeacherDashboard = () => {
     student.fullname?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const studentsPerPage = 4;
+  const studentsPerPage = 6;
   const totalPages = Math.ceil(filteredStudents.length / studentsPerPage);
   const displayedStudents = filteredStudents.slice(
     (currentPage - 1) * studentsPerPage,

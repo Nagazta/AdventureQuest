@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import SidebarNavigation from "../../components/SidebarNavigation";
@@ -13,6 +13,19 @@ import QuestStartModal from "../../components/QuestStartModal";
 const StudentDashboard = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleTabClose = () => {
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("session");
+    };
+
+    window.addEventListener("beforeunload", handleTabClose);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleTabClose);
+    };
+  }, []);
 
   const handleLogout = async () => {
     await logout();

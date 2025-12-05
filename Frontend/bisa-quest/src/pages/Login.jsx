@@ -10,7 +10,7 @@ import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login, user } = useAuth();
+  const { login, loginStudent, user } = useAuth();
 
   const [particles] = useState(() => {
     return [...Array(30)].map((_, i) => ({
@@ -57,7 +57,7 @@ const Login = () => {
           id: trailId++,
           x: mouseX + (Math.random() - 0.5) * 10,
           y: mouseY + (Math.random() - 0.5) * 10,
-          size: Math.random() * 12 + 12,
+          size: Math.random() * 13 + 13,
           duration: Math.random() * 1 + 1.5,
         };
 
@@ -101,19 +101,15 @@ const Login = () => {
     try {
       let result;
       if (userType === "student") {
-        const { authService } = await import("../services/authServices.js");
-        result = await authService.loginStudent(
-          formData.studentId,
-          formData.classCode
-        );
+        result = await loginStudent(formData.studentId, formData.classCode);
 
         if (result.success) {
-          navigate("/student/language-selection");
+          navigate("/dashboard");
         }
       } else {
         const email = formData.identifier.includes("@")
           ? formData.identifier
-          : `${formData.identifier}@adventurequest.com`;
+          : `${formData.identifier}@gmail.com`;
         result = await login(email, formData.password);
 
         if (result.success) {

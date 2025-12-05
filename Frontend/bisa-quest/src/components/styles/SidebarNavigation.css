@@ -15,23 +15,22 @@
 
 /* Student Profile Section */
 .student-profile {
-    padding: 5px 10px;
+    padding: 16px 20px;
     border-bottom: 4px solid #78350f;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     background: linear-gradient(135deg, #fbbf24, #f59e0b);
     width: 100%;             
     border: none;             
-    border-bottom: 4px solid #78350f;  
     cursor: pointer;          
     transition: all 0.2s ease; 
-    text-align: left;         
+    text-align: left;
+    overflow: hidden;
 }
 
 .student-profile:hover {
     background: linear-gradient(135deg, #f59e0b, #f97316);
-    transform: translateX(4px);
 }
 
 .student-profile.active {
@@ -40,18 +39,21 @@
 }
 
 .student-avatar {
-    width: 15px;
-    height: 15px;
-    border-radius: 30%;
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 8px;
     background: linear-gradient(135deg, #78350f, #92400e);
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: 'Pixelify Sans', sans-serif;
     font-size: 20px;
     font-weight: 900;
     color: #fef3c7;
     border: 3px solid #78350f;
     box-shadow: 0px 3px 0px #5a2c0c;
+    flex-shrink: 0;
 }
 
 .student-info {
@@ -60,6 +62,7 @@
 }
 
 .student-name {
+    font-family: 'Pixelify Sans', sans-serif;
     font-size: 18px;
     font-weight: 800;
     color: #78350f;
@@ -70,14 +73,16 @@
 }
 
 .student-role {
-    font-size: 15px;
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 13px;
     font-weight: 600;
     color: #92400e;
     margin: 2px 0 0 0;
 }
 
 .app-title {
-    font-size: 28px;
+    font-family: 'Pixelify Sans', sans-serif;
+    font-size: 35px;
     font-weight: bold;
     color: #78350f;
     margin: 0;
@@ -124,7 +129,9 @@
 }
 
 .nav-label {
+    font-family: 'Pixelify Sans', sans-serif;
     font-size: 18px;
+    font-weight: 700;
 }
 
 .sidebar-footer {

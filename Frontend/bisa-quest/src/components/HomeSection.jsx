@@ -125,7 +125,7 @@ const HeroSection = () => {
       <div className="hero-content-game fade-in">
         <div className="game-title-container">
           <h1 className="game-title epic-text">
-            <span className="title-line-1">Adventure</span>
+            <span className="title-line-1">Bisa</span>
             <span className="title-line-2">Quest</span>
           </h1>
           <div className="title-decoration"></div>
