@@ -8,6 +8,7 @@ import "../components/styles/SidebarNavigation.css";
 
 const SidebarNavigation = ({ onLogout }) => {
   const { user } = useAuth();
+  // console.log("👤 Sidebar user data:", user);
   const [activeItem, setActiveItem] = useState("home");
 
   const navItems = [

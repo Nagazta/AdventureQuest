@@ -15,6 +15,21 @@ export const AuthProvider = ({ children }) => {
 
   const loadSession = async () => {
     try {
+      const storedUser = localStorage.getItem("user");
+
+      if (storedUser) {
+        const userData = JSON.parse(storedUser);
+        setUser({
+          id: userData.user_id,
+          fullname: userData.fullname,
+          email: userData.email,
+          role: userData.role,
+        });
+        setLoading(false);
+        return;
+      }
+
+      // Fallback to teacher session check
       const result = await authService.getSession();
 
       if (result.success && result.user) {
@@ -59,10 +74,33 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginStudent = async (studentId, classCode) => {
+    try {
+      const result = await authService.loginStudent(studentId, classCode);
+
+      if (result.success && result.data?.user) {
+        const u = result.data.user;
+
+        setUser({
+          id: u.user_id,
+          fullname: u.fullname,
+          email: u.email,
+          role: u.role,
+        });
+      }
+
+      return result;
+    } catch (err) {
+      console.error("Student login error:", err);
+      return { success: false, error: err.message };
+    }
+  };
+
   const logout = async () => {
     try {
       await authService.logout();
       localStorage.removeItem("session");
+      localStorage.removeItem("user");
       setUser(null);
       return { success: true };
     } catch {
@@ -71,7 +109,9 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, loading, login, loginStudent, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

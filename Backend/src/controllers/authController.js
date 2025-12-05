@@ -77,6 +77,7 @@ export const login = async (req, res) => {
                 error: 'Please provide email and password'
             });
         }
+
         const { data: authData, error: authError } = await supabase.auth.signInWithPassword({
             email,
             password,
@@ -102,15 +103,6 @@ export const login = async (req, res) => {
 
             if (teacherError) throw teacherError;
             roleData = teacherData;
-        } else if (userData.role === 'student') {
-            const { data: studentData, error: studentError } = await supabase
-                .from('student')
-                .select('*')
-                .eq('user_id', authData.user.id)
-                .single();
-
-            if (studentError) throw studentError;
-            roleData = studentData;
         }
 
         res.json({
@@ -132,7 +124,6 @@ export const login = async (req, res) => {
     }
 };
 
-// Logout
 export const logout = async (req, res) => {
     try {
         const { error } = await supabase.auth.signOut();
@@ -152,7 +143,6 @@ export const logout = async (req, res) => {
     }
 };
 
-// Get Current Session
 export const getSession = async (req, res) => {
     try {
         const authHeader = req.headers.authorization;
@@ -191,7 +181,6 @@ export const getSession = async (req, res) => {
     }
 };
 
-// Create Student (Teacher only)
 export const createStudent = async (req, res) => {
     try {
         const { email, password, firstName, lastName, teacherID } = req.body;
@@ -259,6 +248,7 @@ export const createStudent = async (req, res) => {
 
 export const loginStudent = async (req, res) => {
     try {
+        console.log('[STUDENT LOGIN] Attempt:', req.body);
         const { studentId, classCode } = req.body;
 
         if (!studentId || !classCode) {
@@ -268,32 +258,88 @@ export const loginStudent = async (req, res) => {
             });
         }
 
-        const { data: studentData, error: studentError } = await supabase
-            .from('student')
-            .select('*, users(*)')
-            .eq('student_id', studentId)
-            .eq('class_code', classCode)
+        // First find the user by username
+        const { data: userData, error: userError } = await supabase
+            .from('users')
+            .select('user_id')
+            .eq('username', studentId)
             .single();
 
-        if (studentError || !studentData) {
+        console.log('[USER LOOKUP]', { userData, userError });
+
+        if (userError || !userData) {
+            console.log('[ERROR] User not found');
             return res.status(401).json({
                 success: false,
                 error: 'Invalid student ID or class code'
             });
         }
 
-        res.json({
+        // Then find the student record
+        const { data: studentData, error: studentError } = await supabase
+            .from('student')
+            .select('student_id, class_code, teacher_id')
+            .eq('user_id', userData.user_id)
+            .single();
+
+        console.log('[STUDENT LOOKUP]', { studentData, studentError });
+
+        if (studentError || !studentData) {
+            console.log('[ERROR] Student record not found:', studentError?.message);
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid student ID or class code'
+            });
+        }
+
+        // Verify class code matches
+        if (studentData.class_code !== classCode) {
+            console.log('[ERROR] Class code mismatch:', {
+                expected: studentData.class_code,
+                received: classCode
+            });
+            return res.status(401).json({
+                success: false,
+                error: 'Invalid student ID or class code'
+            });
+        }
+
+        // Get full user data
+        const { data: fullUserData, error: fullUserError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('user_id', userData.user_id)
+            .single();
+
+        console.log('[FULL USER DATA]', { fullUserData, fullUserError });
+
+        if (fullUserError || !fullUserData) {
+            console.log('[ERROR] Could not fetch full user data');
+            return res.status(500).json({
+                success: false,
+                error: 'Login failed'
+            });
+        }
+
+        const responsePayload = {
             success: true,
             message: 'Student login successful',
             data: {
-                user: studentData.users,
-                roleData: studentData,
-                session: { user_id: studentData.users.user_id },
+                user: fullUserData,
+                roleData: {
+                    student_id: studentData.student_id,
+                    class_code: studentData.class_code,
+                    teacher_id: studentData.teacher_id
+                },
+                session: { user_id: fullUserData.user_id }
             }
-        });
+        };
+
+        console.log('[SUCCESS] Sending response:', JSON.stringify(responsePayload));
+        return res.status(200).json(responsePayload);
 
     } catch (error) {
-        console.error('Student login error:', error);
+        console.error('[CATCH] Student login error:', error);
         res.status(401).json({
             success: false,
             error: error.message || 'Student login failed'
